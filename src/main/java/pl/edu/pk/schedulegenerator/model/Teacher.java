@@ -14,7 +14,7 @@ public class Teacher {
     private String id;
     private String name;
     private String titleID;
-    private int studyFieldId;
+    private String studyFieldId;
     private WeekAvailability availability;
 
 }

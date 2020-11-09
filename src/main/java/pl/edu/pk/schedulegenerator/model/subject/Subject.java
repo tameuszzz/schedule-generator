@@ -16,6 +16,6 @@ public class Subject {
     private boolean eligibility;
     private SubjectSchedule schedule;
     private StudyStudents students;
-    private SubjectTeachers teachers;
+    private SubjectTeachers[] teachers;
 
 }
