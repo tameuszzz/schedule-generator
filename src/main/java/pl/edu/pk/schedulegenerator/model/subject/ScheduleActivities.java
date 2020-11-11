@@ -9,5 +9,5 @@ public class ScheduleActivities {
 
     private boolean enabled = false;
     private int hours = 0;
-    
+
 }

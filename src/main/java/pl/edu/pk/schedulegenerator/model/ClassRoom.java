@@ -14,5 +14,6 @@ public class ClassRoom {
     private String id;
     private String name;
     private WeekAvailability availability;
+    private String studyFieldID;
 
 }
