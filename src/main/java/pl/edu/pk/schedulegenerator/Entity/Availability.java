@@ -1,4 +1,4 @@
-package pl.edu.pk.schedulegenerator.model;
+package pl.edu.pk.schedulegenerator.Entity;
 
 public class Availability {
 

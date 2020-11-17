@@ -1,8 +1,8 @@
-package pl.edu.pk.schedulegenerator.model.subject;
+package pl.edu.pk.schedulegenerator.Entity.subject;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import pl.edu.pk.schedulegenerator.model.Teacher;
+import pl.edu.pk.schedulegenerator.Entity.Teacher;
 
 @Data
 @RequiredArgsConstructor

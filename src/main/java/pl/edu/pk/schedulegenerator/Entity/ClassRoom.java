@@ -1,4 +1,4 @@
-package pl.edu.pk.schedulegenerator.model.subject;
+package pl.edu.pk.schedulegenerator.Entity;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -7,15 +7,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @RequiredArgsConstructor
-@Document(collection = "Subject")
-public class Subject {
+@Document(collection = "ClassRoom")
+public class ClassRoom {
 
     @Id
     private String id;
     private String name;
-    private boolean eligibility;
-    private SubjectSchedule schedule;
-    private StudyStudents students;
-    private SubjectTeachers[] teachers;
+    private WeekAvailability availability;
+    private String studyFieldID;
 
 }

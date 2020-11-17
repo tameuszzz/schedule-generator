@@ -1,4 +1,4 @@
-package pl.edu.pk.schedulegenerator.model.subject;
+package pl.edu.pk.schedulegenerator.Entity.subject;
 
 
 import lombok.Data;

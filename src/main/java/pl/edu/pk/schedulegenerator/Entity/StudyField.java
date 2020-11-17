@@ -1,11 +1,11 @@
-package pl.edu.pk.schedulegenerator.model;
+package pl.edu.pk.schedulegenerator.Entity;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.IndexDirection;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.validation.constraints.*;
 
 @Data
 @RequiredArgsConstructor
@@ -14,10 +14,18 @@ public class StudyField {
 
     @Id
     private String id;
-    @Indexed(direction = IndexDirection.ASCENDING)
+    @NotBlank
+    @Size(min = 3, max = 50)
     private String name;
+    @NotNull
+    @Min(1)
+    @Max(2)
     private int degree;
+    @NotNull
+    @Min(1)
+    @Max(10)
     private int numberOfSemesters;
-    private String departmentId;
+    @NotBlank
+    private String departmentID;
 
 }
