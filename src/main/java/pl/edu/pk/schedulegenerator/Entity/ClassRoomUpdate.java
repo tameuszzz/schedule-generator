@@ -6,5 +6,4 @@ import lombok.Data;
 public class ClassRoomUpdate {
     private String name;
     private WeekAvailability availability;
-    private String studyFieldID;
 }

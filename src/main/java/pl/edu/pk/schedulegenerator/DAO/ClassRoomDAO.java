@@ -35,7 +35,6 @@ public class ClassRoomDAO {
         Optional<ClassRoom> classRoom = repository.findById(id);
         classRoom.ifPresent(c -> c.setName(classRoomUpdate.getName()));
         classRoom.ifPresent(c -> c.setAvailability(classRoomUpdate.getAvailability()));
-        classRoom.ifPresent(c -> c.setStudyFieldID(classRoomUpdate.getStudyFieldID()));
         classRoom.ifPresent(c -> repository.save(c));
         return classRoom;
     }

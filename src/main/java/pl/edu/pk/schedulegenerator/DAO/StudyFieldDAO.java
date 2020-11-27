@@ -69,7 +69,6 @@ public class StudyFieldDAO {
         studyField.ifPresent(s -> s.setName(studyFieldUpdate.getName()));
         studyField.ifPresent(s -> s.setDegree(studyFieldUpdate.getDegree()));
         studyField.ifPresent(s -> s.setNumberOfSemesters(studyFieldUpdate.getNumberOfSemesters()));
-        studyField.ifPresent(s -> s.setDepartmentID(studyFieldUpdate.getDepartmentID()));
         studyField.ifPresent(s -> repository.save(s));
         return studyField;
     }

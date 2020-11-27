@@ -6,6 +6,7 @@ import lombok.Data;
 public class TeacherUpdate {
     private String name;
     private String titleID;
+    private String email;
     private String studyFieldId;
     private WeekAvailability availability;
 }

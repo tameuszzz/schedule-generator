@@ -7,5 +7,4 @@ public class StudyFieldUpdate {
     private String name;
     private int degree;
     private int numberOfSemesters;
-    private String departmentID;
 }
