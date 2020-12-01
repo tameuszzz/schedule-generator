@@ -17,27 +17,27 @@ public class TeacherController {
     @Autowired
     private TeacherService service;
 
-    @GetMapping("/get")
+    @GetMapping
     public Collection<Teacher> getTeachers() {
         return service.getTeachers();
     }
 
-    @PostMapping("/post")
+    @PostMapping
     public Teacher postTeacher(@RequestBody Teacher teacher) {
         return service.postTeacher(teacher);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public Optional<Teacher> getTeacherById(@PathVariable String id) {
         return service.getTeacherById(id);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public Optional<Teacher> deleteTeacherById(@PathVariable String id) {
         return service.deleteTeacherById(id);
     }
 
-    @PutMapping("/put/{id}")
+    @PutMapping("/{id}")
     public Optional<Teacher> updateTeacherById(@PathVariable String id, @RequestBody TeacherUpdate teacherUpdate) {
         return service.updateTeacherById(id, teacherUpdate);
     }

@@ -16,12 +16,12 @@ public class DepartmentController {
     @Autowired
     private DepartmentService service;
 
-    @GetMapping("/get")
+    @GetMapping
     public Collection<Department> getDepartments() {
         return service.getDepartments();
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public Optional<Department> getDepartmentById(@PathVariable String id) {
         return service.getDepartmentById(id);
     }

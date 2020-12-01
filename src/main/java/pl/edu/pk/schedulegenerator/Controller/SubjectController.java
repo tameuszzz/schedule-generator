@@ -18,27 +18,27 @@ public class SubjectController {
     private SubjectService service;
 
 
-    @GetMapping("/get")
+    @GetMapping
     public Collection<Subject> getSubjects() {
         return service.getSubjects();
     }
 
-    @PostMapping("/post")
+    @PostMapping
     public Subject postSubject(@RequestBody Subject subject) {
         return service.postSubject(subject);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public Optional<Subject> getSubjectById(@PathVariable String id) {
         return service.getSubjectById(id);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public Optional<Subject> deleteSubjectById(@PathVariable String id) {
         return service.deleteSubjectById(id);
     }
 
-    @PutMapping("/put/{id}")
+    @PutMapping("/{id}")
     public Optional<Subject> updateSubjectById(@PathVariable String id, @RequestBody SubjectUpdate subjectUpdate) {
         return service.updateSubjectById(id, subjectUpdate);
     }

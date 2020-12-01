@@ -18,27 +18,27 @@ public class StudyFieldController {
     @Autowired
     private StudyFieldService service;
 
-    @GetMapping("/get")
+    @GetMapping
     public Collection<StudyField> getStudyFields() {
         return service.getStudyFields();
     }
 
-    @PostMapping("/post")
+    @PostMapping
     public StudyField postStudyField(@Valid @RequestBody StudyField studyField) {
         return service.postStudyField(studyField);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public Optional<StudyField> getStudyFieldById(@PathVariable String id) {
         return service.getStudyFieldsById(id);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public Optional<StudyField> deleteStudyFieldById(@PathVariable String id) {
         return service.deleteStudyFieldById(id);
     }
 
-    @PutMapping("/put/{id}")
+    @PutMapping("/{id}")
     public Optional<StudyField> updateStudyFieldById(@PathVariable String id, @RequestBody StudyFieldUpdate studyFieldUpdate) {
         return service.updateStudyFieldById(id, studyFieldUpdate);
     }

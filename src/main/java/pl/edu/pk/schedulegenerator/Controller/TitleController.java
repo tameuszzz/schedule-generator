@@ -16,12 +16,12 @@ public class TitleController {
     @Autowired
     private TitleService service;
 
-    @GetMapping("/get")
+    @GetMapping
     public Collection<Title> getTitles() {
         return service.getTitles();
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public Optional<Title> getTitleById(@PathVariable String id) {
         return service.getTitleById(id);
     }
