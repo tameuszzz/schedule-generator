@@ -7,6 +7,7 @@ import pl.edu.pk.schedulegenerator.Entity.Teacher;
 @Data
 @RequiredArgsConstructor
 public class SubjectTeachers {
+
     private Teacher teacher;
     private boolean lecturesEnable;
     private int lecturesHours;

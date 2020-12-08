@@ -1,6 +1,7 @@
 package pl.edu.pk.schedulegenerator.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.schedulegenerator.Entity.StudyField;
 import pl.edu.pk.schedulegenerator.Entity.StudyFieldUpdate;
@@ -24,8 +25,9 @@ public class StudyFieldController {
     }
 
     @PostMapping
-    public StudyField postStudyField(@Valid @RequestBody StudyField studyField) {
-        return service.postStudyField(studyField);
+    public ResponseEntity<String> postStudyField(@Valid @RequestBody StudyField studyField) {
+        service.postStudyField(studyField);
+        return ResponseEntity.ok("Pomyślnie utworzono nowy kierunek: " + studyField.getName());
     }
 
     @GetMapping("/{id}")
@@ -39,8 +41,10 @@ public class StudyFieldController {
     }
 
     @PutMapping("/{id}")
-    public Optional<StudyField> updateStudyFieldById(@PathVariable String id, @RequestBody StudyFieldUpdate studyFieldUpdate) {
-        return service.updateStudyFieldById(id, studyFieldUpdate);
+    public ResponseEntity<String> updateStudyFieldById(@PathVariable String id, @Valid @RequestBody StudyFieldUpdate studyFieldUpdate) {
+        service.updateStudyFieldById(id, studyFieldUpdate);
+        return ResponseEntity.ok("Pomyślnie edytowano kierunek: " + studyFieldUpdate.getName());
+
     }
 
 }

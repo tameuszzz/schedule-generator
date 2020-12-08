@@ -5,11 +5,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
-import pl.edu.pk.schedulegenerator.Entity.ClassRoom;
 import pl.edu.pk.schedulegenerator.Entity.StudyField;
 import pl.edu.pk.schedulegenerator.Entity.StudyFieldUpdate;
 import pl.edu.pk.schedulegenerator.Entity.Teacher;
-import pl.edu.pk.schedulegenerator.Service.ClassRoomService;
 import pl.edu.pk.schedulegenerator.Service.TeacherService;
 
 import java.util.Collection;
@@ -38,20 +36,9 @@ public class StudyFieldDAO {
 
     public Optional<StudyField> deleteStudyFieldById(String id) {
         Optional<StudyField> studyField = repository.findById(id);
-        studyField.ifPresent(s -> deleteClassByStudyFieldId(s.getId()));
         studyField.ifPresent(s -> deleteTeacherByStudyFieldId(s.getId()));
         studyField.ifPresent(s -> repository.delete(s));
         return studyField;
-    }
-
-    private void deleteClassByStudyFieldId(String id) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("studyFieldID").is(id));
-        Collection<ClassRoom> classRooms = mongoTemplate.find(query, ClassRoom.class);
-        ClassRoomService crs = new ClassRoomService();
-        for(ClassRoom classRoom : classRooms) {
-            crs.deleteClassRoomById(classRoom.getId());
-        }
     }
 
     private void deleteTeacherByStudyFieldId(String id) {

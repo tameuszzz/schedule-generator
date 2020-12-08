@@ -1,11 +1,13 @@
 package pl.edu.pk.schedulegenerator.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.schedulegenerator.Entity.ClassRoom;
 import pl.edu.pk.schedulegenerator.Entity.ClassRoomUpdate;
 import pl.edu.pk.schedulegenerator.Service.ClassRoomService;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -23,8 +25,9 @@ public class ClassRoomController {
     }
 
     @PostMapping
-    public ClassRoom postClassRoom(@RequestBody ClassRoom classRoom) {
-        return service.createClassRoom(classRoom);
+    public ResponseEntity<String> postClassRoom(@Valid @RequestBody ClassRoom classRoom) {
+        service.createClassRoom(classRoom);
+        return ResponseEntity.ok("Pomyślnie utworzono salę: " + classRoom.getName());
     }
 
     @GetMapping("/{id}")
@@ -38,7 +41,8 @@ public class ClassRoomController {
     }
 
     @PutMapping("/{id}")
-    public Optional<ClassRoom> updateClassRoomById(@PathVariable String id, @RequestBody ClassRoomUpdate classRoomUpdate) {
-        return service.updateClassRoomById(id, classRoomUpdate);
+    public ResponseEntity<String> updateClassRoomById(@PathVariable String id, @Valid @RequestBody ClassRoomUpdate classRoomUpdate) {
+        service.updateClassRoomById(id, classRoomUpdate);
+        return ResponseEntity.ok("Pomyślnie edytowano salę: " + classRoomUpdate.getName());
     }
 }

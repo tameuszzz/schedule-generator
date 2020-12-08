@@ -1,11 +1,13 @@
 package pl.edu.pk.schedulegenerator.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.schedulegenerator.Entity.subject.Subject;
 import pl.edu.pk.schedulegenerator.Entity.subject.SubjectUpdate;
 import pl.edu.pk.schedulegenerator.Service.SubjectService;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -24,8 +26,9 @@ public class SubjectController {
     }
 
     @PostMapping
-    public Subject postSubject(@RequestBody Subject subject) {
-        return service.postSubject(subject);
+    public ResponseEntity<String> postSubject(@Valid @RequestBody Subject subject) {
+        service.postSubject(subject);
+        return ResponseEntity.ok("Pomyślnie utworzono kierunek: " + subject.getName());
     }
 
     @GetMapping("/{id}")
@@ -39,7 +42,9 @@ public class SubjectController {
     }
 
     @PutMapping("/{id}")
-    public Optional<Subject> updateSubjectById(@PathVariable String id, @RequestBody SubjectUpdate subjectUpdate) {
-        return service.updateSubjectById(id, subjectUpdate);
+    public ResponseEntity<String> updateSubjectById(@PathVariable String id, @Valid @RequestBody SubjectUpdate subjectUpdate) {
+        service.updateSubjectById(id, subjectUpdate);
+        return ResponseEntity.ok("Pomyślnie edytowano kierunek: " + subjectUpdate.getName());
+
     }
 }

@@ -1,11 +1,13 @@
 package pl.edu.pk.schedulegenerator.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.schedulegenerator.Entity.Teacher;
 import pl.edu.pk.schedulegenerator.Entity.TeacherUpdate;
 import pl.edu.pk.schedulegenerator.Service.TeacherService;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -23,8 +25,9 @@ public class TeacherController {
     }
 
     @PostMapping
-    public Teacher postTeacher(@RequestBody Teacher teacher) {
-        return service.postTeacher(teacher);
+    public ResponseEntity<String> postTeacher(@Valid @RequestBody Teacher teacher) {
+        service.postTeacher(teacher);
+        return ResponseEntity.ok("Pomyślnie utworzono nowego nauczyciela akademickiego: " +teacher.getName());
     }
 
     @GetMapping("/{id}")
@@ -38,7 +41,8 @@ public class TeacherController {
     }
 
     @PutMapping("/{id}")
-    public Optional<Teacher> updateTeacherById(@PathVariable String id, @RequestBody TeacherUpdate teacherUpdate) {
-        return service.updateTeacherById(id, teacherUpdate);
+    public ResponseEntity<String> updateTeacherById(@PathVariable String id, @Valid @RequestBody TeacherUpdate teacherUpdate) {
+        service.updateTeacherById(id, teacherUpdate);
+        return ResponseEntity.ok("Pomyślnie edytowano nauczyciela akademickiego: " + teacherUpdate.getName());
     }
 }
