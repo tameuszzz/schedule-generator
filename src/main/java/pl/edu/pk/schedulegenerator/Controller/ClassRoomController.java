@@ -25,7 +25,7 @@ public class ClassRoomController {
     }
 
     @PostMapping
-    public ResponseEntity<String> postClassRoom(@Valid @RequestBody ClassRoom classRoom) {
+    public ResponseEntity<String> postClassRoom(@RequestBody ClassRoom classRoom) {
         service.createClassRoom(classRoom);
         return ResponseEntity.ok("Pomyślnie utworzono salę: " + classRoom.getName());
     }

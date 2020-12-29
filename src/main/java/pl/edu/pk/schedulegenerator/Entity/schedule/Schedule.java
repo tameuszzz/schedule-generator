@@ -19,4 +19,9 @@ public class Schedule {
     private String studyFieldId;
     private int numberOfSemester;
     private ArrayList<Semester> semesters;
+
+    public void addSemester(Semester semester) {
+        this.semesters.add(semester);
+    }
 }
+

@@ -13,6 +13,7 @@ public class AvailabilityData {
     private boolean ifWinter;
     private String studyFieldId;
     private int numberOfSemester;
-    private ArrayList<ArrayList<String>> classroomsData;
-    private ArrayList<ArrayList<TeachersData>> teachersData;
+    private ArrayList<ArrayList<ArrayList<String>>> classroomsData;
+    private ArrayList<ArrayList<ArrayList<TeachersData>>> teachersData;
+
 }

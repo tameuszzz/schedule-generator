@@ -10,7 +10,8 @@ import java.util.ArrayList;
 public class ScheduleActivities {
 
     private boolean enabled = false;
-    private int hours = 0;
+    //private int hours = 0;
+    private int groups;
     private boolean online;
     private ArrayList<String> classroom;
 }
