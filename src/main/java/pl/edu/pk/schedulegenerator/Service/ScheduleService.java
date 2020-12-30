@@ -30,111 +30,144 @@ public class ScheduleService {
         schedule.setStudyFieldId(avaData.getStudyFieldId());
         schedule.setNumberOfSemester(avaData.getNumberOfSemester());
 
+        ArrayList<ArrayList<ArrayList<TeachersData>>> preTeachersData = new ArrayList<>(avaData.getTeachersData());
+        ArrayList<ArrayList<ArrayList<String>>> preClassData = new ArrayList<>(avaData.getClassroomsData());
+
         ArrayList<Semester> semesters = new ArrayList<>();
 
         int firstSem;
+        int maxCompaction = 15;
         if (avaData.isIfWinter()) firstSem = 1;
         else firstSem = 2;
 
         boolean subjectFound = false, classroomFound = false;
 
+        // petla iterujaca po liczbie semestrow
         for (int s = firstSem; s <= schedule.getNumberOfSemester(); s+=2) {
+
             Semester semester = new Semester();
             ArrayList<DayOfWeek> daysOfWeek = new ArrayList<>();
             ArrayList<HashMap<Integer, Integer>> compaction = new ArrayList<>();
+
+            // petla iterujaca po dniach tygodnia
             for (int d = 0; d < 5; d++) {
 
                 DayOfWeek dayOfWeek = new DayOfWeek();
                 ArrayList<ScheduleSubject> subjects = new ArrayList<>();
                 HashMap<Integer, Integer> dayCompaction = new HashMap<>();
 
+                if (daysOfWeek.size() > d ) {
+                    dayOfWeek = daysOfWeek.get(d);
+                    subjects = daysOfWeek.get(d).getSubjects();
+                    dayCompaction = compaction.get(d);
+                    System.out.println(dayOfWeek);
+                }
+
+                ArrayList<ArrayList<TeachersData>> preDailyTeachersData = preTeachersData.get(d);
+
+                // petla iterujaca po 15 min blokach
                 for (int i = 0; i < 56; i++) {
 
-                    //System.out.println(i + ", " + dayCompaction.getOrDefault(i, 0));
+                    // jesli nie ma w bloku zadnych przedmiotow -> pomin
+                    if(preDailyTeachersData.get(i).isEmpty()) continue;
 
+                    // jesli w danym bloku wartosc wpisanych przedmiotow jest za duza -> pomin
                     if (dayCompaction.getOrDefault(i, 0) >= 8) continue;
 
-                    for(int k = 0; k < avaData.getTeachersData().get(d).get(i).size(); k++) {
-                        TeachersData teachersData = avaData.getTeachersData().get(d).get(i).get(k);
+                    // petla iterujaca po zawartosci blokow 15 min
+                    for(int k = 0; k < preDailyTeachersData.get(i).size(); k++) {
+                        // k-ty element teachersData
+
+                        TeachersData teachersData = preDailyTeachersData.get(i).get(k);
+
+                        // sprawdzenie czy wybrany przedmiot nalezy do obecnego semestru
                         if(teachersData.getSemesterOfSubject() != s) continue;
+
+                        // obliczenie warosci przedmiotu
                         int valueOfSubject = calculateValueOfSubject(teachersData.getSubjectType());
-                        //System.out.println("valueOfSubject: " + valueOfSubject);
+
+                        // jak suma wartosci wpisanych juz przedmiotow w bloku i przedmiotu wybranego jest za duza -> pomin
                         if (dayCompaction.getOrDefault(i, 0) + valueOfSubject > 8) continue;
                         subjectFound = false;
+
+                        // petla iterujaca X kolejnych blokow 15 min w celu sprawdzenia czy jest miejsce na wpisanie przedmiotu
                         for(int j = i; j < i+6; ++j) {
-                            for(int m = 0; m < avaData.getTeachersData().get(d).get(j).size(); m++) {
-                                if (teachersData.equals(avaData.getTeachersData().get(d).get(j).get(m))) {
+                            // petla sprawdza czy w danym bloku znajduje sie wybrany przedmiot
+                            for(int m = 0; m < preDailyTeachersData.get(j).size(); m++) {
+                                if (teachersData.equals(preDailyTeachersData.get(j).get(m))) {
                                     subjectFound = true;
                                     break;
                                 } else subjectFound = false;
                             }
-                            //System.out.println("k = " + k + ", i = " + i);
-                            //System.out.println(subjectFound);
                         }
+
                         if(subjectFound) {
-                            log.info("Subject found: " + teachersData.toString());
                             if (teachersData.getClassName() == null) {
                                 subjects.add(createSubject(teachersData, i));
-                                //updateDayCompaction(i, valueOfSubject, dayCompaction);
                             }
-                            //else if (teachersData.getClassName().isEmpty()) {
-                            else {
+                            else if (teachersData.getClassName().isEmpty()) {
                                 subjects.add(createSubject(teachersData, i));
-                                //updateDayCompaction(i, valueOfSubject, dayCompaction);
                             }
-//                            else {
-//                                // TODO: Wyszukiwanie sal
-//                                for(int classIndex = 0; classIndex < teachersData.getClassName().size(); classIndex++) {
-//                                    String classFoundName = teachersData.getClassName().get(classIndex);
-//                                    classroomFound = false;
-//                                    for(int j = i; j < i+6; ++j) {
-//                                        for(int m = 0; m < avaData.getClassroomsData().get(d).get(j).size(); m++) {
-//                                            if (classFoundName.equals(avaData.getClassroomsData().get(d).get(j).get(m))) {
-//                                                classroomFound = true;
-//                                                break;
-//                                            }
-//                                            else classroomFound = false;
-//                                        }
-//                                        if (!classroomFound) break;
-//                                    }
-//                                    if (classroomFound) {
-//                                        subjects.add(createSubject(teachersData, i));
-//                                        removeClassroomFromClassroomsData(avaData, classFoundName, i, d);
-//                                    }
-//                                }
-//                                if (!classroomFound) continue;
-//                            }
-                            removeSubjectFromTeachersData(avaData, teachersData);
-                            removeTeacherFromTeachersData(i, d, avaData, teachersData);
+                            else {
+                                ArrayList<ArrayList<String>> preDailyClassData = preClassData.get(d);
+                                for(int classIndex = 0; classIndex < teachersData.getClassName().size(); classIndex++) {
+                                    String classFoundName = teachersData.getClassName().get(classIndex);
+                                    classroomFound = false;
+                                    for(int j = i; j < i+6; ++j) {
+                                        for(int m = 0; m < preDailyClassData.get(j).size(); m++) {
+                                            if (classFoundName.equals(preDailyClassData.get(j).get(m))) {
+                                                classroomFound = true;
+                                                break;
+                                            }
+                                            else classroomFound = false;
+                                        }
+                                        if (!classroomFound) break;
+                                    }
+                                    if (!classroomFound) continue;
+                                    subjects.add(createSubject(teachersData, i));
+                                    removeClassroomFromClassroomsData(avaData, classFoundName, i, d);
+                                    break;
+                                }
+                                if (!classroomFound) continue;
+                            }
+
+                            log.info("Subject found: " + teachersData.toString());
+
+                            // to robi przerwe po zajeciach
+                            if(!preDailyTeachersData.get(i+6).isEmpty()) preDailyTeachersData.get(i+6).clear();
+
+                            removeSubjectFromTeachersData(preTeachersData, teachersData);
+                            preTeachersData.set(d, removeTeacherFromTeachersData(i, preDailyTeachersData, teachersData));
                             for (int j = i; j < i+6; j++) {
                                 int tmpDayCompaction = dayCompaction.getOrDefault(j, 0);
                                 dayCompaction.put(j, tmpDayCompaction + valueOfSubject);
                             }
-//                            if(valueOfSubject == 8) {
-//                                for(int j = i; j < i+6; j++) {
-//                                    for (int m = 0; m < avaData.getTeachersData().get(d).get(j).size(); m++)
-//                                    avaData.getTeachersData().get(d).get(j).remove(m);
-//                                }
-//                            } else {
-//                                for(int j = i; j < i+6; j++) {
-//                                    for (int m = 0; m < avaData.getTeachersData().get(d).get(j).size(); m++)
-//                                        if(avaData.getTeachersData().get(d).get(j).get(m).getSubjectType().equals("Lectures"))
-//                                            avaData.getTeachersData().get(d).get(j).remove(m);
-//                                }
-//                            }
-                            i = 0;
+
+                            i = -1;
                             break;
                         }
                     }
 
-                }
+                    if(computeCompation(dayCompaction) > maxCompaction) break;
 
-                if(!subjects.isEmpty()) {
+                }
+                if(!(subjects == null) && !subjects.isEmpty()) {
                     dayOfWeek.setSubjects(subjects);
                 }
 
-                //System.out.println(dayCompaction);
-                daysOfWeek.add(dayOfWeek);
+                compaction.add(dayCompaction);
+
+                if (d >= daysOfWeek.size()) {
+                    daysOfWeek.add(dayOfWeek);
+                } else {
+                    daysOfWeek.set(d, dayOfWeek);
+                }
+
+
+                if ((d == 4 && !preTeachersData.isEmpty()) && maxCompaction < 40) {
+                        d = -1;
+                        maxCompaction +=5;
+                }
 
             }
 
@@ -145,28 +178,22 @@ public class ScheduleService {
 
         schedule.setSemesters(semesters);
 
-        System.out.println(avaData);
-
         return dao.postSchedule(schedule);
     }
 
-    private void removeTeacherFromTeachersData(int i, int d, AvailabilityData avaData, TeachersData teachersData) {
-        for (int j = i; j < i+6; j++) {
-            for(int m = 0; m < avaData.getTeachersData().get(d).get(j).size(); m++) {
-                if(teachersData.getTeacherName().equals(avaData.getTeachersData().get(d).get(j).get(m).getTeacherName())
-                && teachersData.getTeacherTitle().equals(avaData.getTeachersData().get(d).get(j).get(m).getTeacherTitle())) {
-                    avaData.getTeachersData().get(d).get(j).remove(m);
-                    System.out.println("removing : " + teachersData.getTeacherTitle() + " " + teachersData.getTeacherName());
-                }
-            }
+    private int computeCompation(HashMap<Integer, Integer> dayCompaction) {
+        int sum = 0;
+        for (Integer n : dayCompaction.values()) {
+            sum += n;
         }
+        return sum / 6;
     }
 
-    private void updateDayCompaction(int i, int valueOfSubject, HashMap<Integer, Integer> dayCompaction) {
+    private ArrayList<ArrayList<TeachersData>> removeTeacherFromTeachersData(int i, ArrayList<ArrayList<TeachersData>> data, TeachersData teachersData) {
         for (int j = i; j < i+6; j++) {
-            int tmpDayCompaction = dayCompaction.getOrDefault(i, 0);
-            dayCompaction.put(i, tmpDayCompaction + valueOfSubject);
+            data.get(j).removeIf(n -> n.getTeacherName().equals(teachersData.getTeacherName()));
         }
+        return data;
     }
 
     private int calculateValueOfSubject(String subjectType) {
@@ -192,17 +219,12 @@ public class ScheduleService {
         return scheduleSubject;
     }
 
-    private void removeSubjectFromTeachersData(AvailabilityData avaData, TeachersData teachersData) {
-        for(int i = 0; i < avaData.getTeachersData().size(); i++) {
-            for (int j = 0; j < avaData.getTeachersData().get(i).size(); j++) {
-                for (int k = 0; k < avaData.getTeachersData().get(i).get(j).size(); k ++) {
-                    if( avaData.getTeachersData().get(i).get(j).get(k).equals(teachersData)) {
-                        avaData.getTeachersData().get(i).get(j).remove(k);
-                    }
-                }
+    private void removeSubjectFromTeachersData(ArrayList<ArrayList<ArrayList<TeachersData>>> data, TeachersData teachersData) {
+        for (ArrayList<ArrayList<TeachersData>> dailyData : data) {
+            for (ArrayList<TeachersData> teachersDataArrayList : dailyData) {
+                teachersDataArrayList.removeIf(n -> n.equals(teachersData));
             }
         }
-        System.out.println("usuwam przedmiot: " + teachersData);
     }
 
     private void removeClassroomFromClassroomsData(AvailabilityData avaData, String classFoundName, int i, int d) {
@@ -213,7 +235,6 @@ public class ScheduleService {
                 }
             }
         }
-        System.out.println("usuwam sale: " + classFoundName + "z dnia: " + d + " [od]:[do] " + i + ":" + (i+5));
     }
 
     public Optional<Schedule> getScheduleById(String id) {
