@@ -26,7 +26,7 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public Schedule postSchedule(@RequestBody AvailabilityData availabilityData) {
+    public String postSchedule(@RequestBody AvailabilityData availabilityData) {
         log.info("ScheduleController - postSchedule");
         //log.info(String.valueOf(availabilityData));
         return service.postSchedule(availabilityData);

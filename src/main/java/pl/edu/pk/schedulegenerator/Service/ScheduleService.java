@@ -22,7 +22,7 @@ public class ScheduleService {
         return dao.getSchedules();
     }
 
-    public Schedule postSchedule(AvailabilityData avaData) {
+    public String postSchedule(AvailabilityData avaData) {
 
         Schedule schedule = new Schedule();
         schedule.setName(avaData.getName());
@@ -36,11 +36,11 @@ public class ScheduleService {
         ArrayList<Semester> semesters = new ArrayList<>();
 
         int firstSem;
-        int maxCompaction = 15;
+        int maxCompaction = 12;
         if (avaData.isIfWinter()) firstSem = 1;
         else firstSem = 2;
 
-        boolean subjectFound = false, classroomFound = false;
+        boolean newSubjectFound = false, subjectFound = false, classroomFound = false;
 
         // petla iterujaca po liczbie semestrow
         for (int s = firstSem; s <= schedule.getNumberOfSemester(); s+=2) {
@@ -55,6 +55,7 @@ public class ScheduleService {
                 DayOfWeek dayOfWeek = new DayOfWeek();
                 ArrayList<ScheduleSubject> subjects = new ArrayList<>();
                 HashMap<Integer, Integer> dayCompaction = new HashMap<>();
+                ArrayList<ArrayList<TeachersData>> preDailyTeachersData = preTeachersData.get(d);
 
                 if (daysOfWeek.size() > d ) {
                     dayOfWeek = daysOfWeek.get(d);
@@ -62,8 +63,6 @@ public class ScheduleService {
                     dayCompaction = compaction.get(d);
                     System.out.println(dayOfWeek);
                 }
-
-                ArrayList<ArrayList<TeachersData>> preDailyTeachersData = preTeachersData.get(d);
 
                 // petla iterujaca po 15 min blokach
                 for (int i = 0; i < 56; i++) {
@@ -132,6 +131,7 @@ public class ScheduleService {
                             }
 
                             log.info("Subject found: " + teachersData.toString());
+                            newSubjectFound = true;
 
                             // to robi przerwe po zajeciach
                             if(!preDailyTeachersData.get(i+6).isEmpty()) preDailyTeachersData.get(i+6).clear();
@@ -164,9 +164,10 @@ public class ScheduleService {
                 }
 
 
-                if ((d == 4 && !preTeachersData.isEmpty()) && maxCompaction < 40) {
+                if ((d == 4 && !preTeachersData.isEmpty()) && newSubjectFound) {
                         d = -1;
                         maxCompaction +=5;
+                        newSubjectFound = false;
                 }
 
             }

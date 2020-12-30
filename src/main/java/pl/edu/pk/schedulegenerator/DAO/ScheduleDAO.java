@@ -17,8 +17,9 @@ public class ScheduleDAO {
         return repository.findAll();
     }
 
-    public Schedule postSchedule(Schedule schedule) {
-        return repository.insert(schedule);
+    public String postSchedule(Schedule schedule) {
+        repository.insert(schedule);
+        return schedule.getId();
     }
 
     public Optional<Schedule> getScheduleById(String id) {
