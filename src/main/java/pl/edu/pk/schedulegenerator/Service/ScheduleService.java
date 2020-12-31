@@ -201,9 +201,8 @@ public class ScheduleService {
         switch (subjectType) {
             case "Exercise":
             case "Seminars":
-                return 2;
             case "Laboratories":
-                return 1;
+                return 4;
             default:
                 return 8;
         }
