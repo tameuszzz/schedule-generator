@@ -19,6 +19,7 @@ public class ScheduleDAO {
 
     public String postSchedule(Schedule schedule) {
         repository.insert(schedule);
+        System.out.println(schedule.getId());
         return schedule.getId();
     }
 

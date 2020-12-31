@@ -123,7 +123,7 @@ public class ScheduleService {
                                         if (!classroomFound) break;
                                     }
                                     if (!classroomFound) continue;
-                                    subjects.add(createSubject(teachersData, i));
+                                    subjects.add(createSubject(teachersData, i, classFoundName));
                                     removeClassroomFromClassroomsData(avaData, classFoundName, i, d);
                                     break;
                                 }
@@ -209,15 +209,20 @@ public class ScheduleService {
         }
     }
 
-    private ScheduleSubject createSubject(TeachersData teachersData, int i) {
+    private ScheduleSubject createSubject(TeachersData teachersData, int i, String className) {
         ScheduleSubject scheduleSubject = new ScheduleSubject();
         scheduleSubject.setSubjectName(teachersData.getSubjectName());
         scheduleSubject.setSubjectType(teachersData.getSubjectType());
         scheduleSubject.setTeacherTitle(teachersData.getTeacherTitle());
         scheduleSubject.setTeacherName(teachersData.getTeacherName());
+        scheduleSubject.setClassRoomName(className);
         scheduleSubject.setFirstIndex(i);
         scheduleSubject.setLastIndex(i+5);
         return scheduleSubject;
+    }
+
+    private ScheduleSubject createSubject(TeachersData teachersData, int i) {
+        return  createSubject(teachersData, i, "online");
     }
 
     private void removeSubjectFromTeachersData(ArrayList<ArrayList<ArrayList<TeachersData>>> data, TeachersData teachersData) {
