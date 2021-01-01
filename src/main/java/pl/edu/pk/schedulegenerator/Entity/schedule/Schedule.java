@@ -18,6 +18,7 @@ public class Schedule {
     private boolean ifWinter;
     private String studyFieldId;
     private int numberOfSemester;
+    private int lessonWidth;
     private ArrayList<Semester> semesters;
 
     public void addSemester(Semester semester) {

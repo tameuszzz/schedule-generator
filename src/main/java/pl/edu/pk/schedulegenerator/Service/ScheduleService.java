@@ -27,6 +27,7 @@ public class ScheduleService {
         Schedule schedule = new Schedule();
         schedule.setName(avaData.getName());
         schedule.setIfWinter(avaData.isIfWinter());
+        schedule.setLessonWidth(avaData.getLessonWidth());
         schedule.setStudyFieldId(avaData.getStudyFieldId());
         schedule.setNumberOfSemester(avaData.getNumberOfSemester());
 
@@ -35,6 +36,7 @@ public class ScheduleService {
 
         ArrayList<Semester> semesters = new ArrayList<>();
 
+        int duration = avaData.getLessonWidth() * 3;
         int firstSem;
         int maxCompaction = 12;
         if (avaData.isIfWinter()) firstSem = 1;
@@ -90,7 +92,7 @@ public class ScheduleService {
                         subjectFound = false;
 
                         // petla iterujaca X kolejnych blokow 15 min w celu sprawdzenia czy jest miejsce na wpisanie przedmiotu
-                        for(int j = i; j < i+6; ++j) {
+                        for(int j = i; j < i+duration; ++j) {
                             // petla sprawdza czy w danym bloku znajduje sie wybrany przedmiot
                             for(int m = 0; m < preDailyTeachersData.get(j).size(); m++) {
                                 if (teachersData.equals(preDailyTeachersData.get(j).get(m))) {
@@ -102,17 +104,17 @@ public class ScheduleService {
 
                         if(subjectFound) {
                             if (teachersData.getClassName() == null) {
-                                subjects.add(createSubject(teachersData, i));
+                                subjects.add(createSubject(teachersData, i, duration));
                             }
                             else if (teachersData.getClassName().isEmpty()) {
-                                subjects.add(createSubject(teachersData, i));
+                                subjects.add(createSubject(teachersData, i, duration));
                             }
                             else {
                                 ArrayList<ArrayList<String>> preDailyClassData = preClassData.get(d);
                                 for(int classIndex = 0; classIndex < teachersData.getClassName().size(); classIndex++) {
                                     String classFoundName = teachersData.getClassName().get(classIndex);
                                     classroomFound = false;
-                                    for(int j = i; j < i+6; ++j) {
+                                    for(int j = i; j < i+duration; ++j) {
                                         for(int m = 0; m < preDailyClassData.get(j).size(); m++) {
                                             if (classFoundName.equals(preDailyClassData.get(j).get(m))) {
                                                 classroomFound = true;
@@ -123,8 +125,8 @@ public class ScheduleService {
                                         if (!classroomFound) break;
                                     }
                                     if (!classroomFound) continue;
-                                    subjects.add(createSubject(teachersData, i, classFoundName));
-                                    removeClassroomFromClassroomsData(avaData, classFoundName, i, d);
+                                    subjects.add(createSubject(teachersData, i, duration,  classFoundName));
+                                    removeClassroomFromClassroomsData(avaData, classFoundName, i, duration, d);
                                     break;
                                 }
                                 if (!classroomFound) continue;
@@ -134,11 +136,11 @@ public class ScheduleService {
                             newSubjectFound = true;
 
                             // to robi przerwe po zajeciach
-                            if(!preDailyTeachersData.get(i+6).isEmpty()) preDailyTeachersData.get(i+6).clear();
+                            if(!preDailyTeachersData.get(i+duration).isEmpty()) preDailyTeachersData.get(i+duration).clear();
 
                             removeSubjectFromTeachersData(preTeachersData, teachersData);
-                            preTeachersData.set(d, removeTeacherFromTeachersData(i, preDailyTeachersData, teachersData));
-                            for (int j = i; j < i+6; j++) {
+                            preTeachersData.set(d, removeTeacherFromTeachersData(i, duration, preDailyTeachersData, teachersData));
+                            for (int j = i; j < i+duration; j++) {
                                 int tmpDayCompaction = dayCompaction.getOrDefault(j, 0);
                                 dayCompaction.put(j, tmpDayCompaction + valueOfSubject);
                             }
@@ -148,7 +150,7 @@ public class ScheduleService {
                         }
                     }
 
-                    if(computeCompation(dayCompaction) > maxCompaction) break;
+                    if(computeCompation(dayCompaction, duration) > maxCompaction) break;
 
                 }
                 if(!(subjects == null) && !subjects.isEmpty()) {
@@ -182,16 +184,16 @@ public class ScheduleService {
         return dao.postSchedule(schedule);
     }
 
-    private int computeCompation(HashMap<Integer, Integer> dayCompaction) {
+    private int computeCompation(HashMap<Integer, Integer> dayCompaction, int duration) {
         int sum = 0;
         for (Integer n : dayCompaction.values()) {
             sum += n;
         }
-        return sum / 6;
+        return sum / duration;
     }
 
-    private ArrayList<ArrayList<TeachersData>> removeTeacherFromTeachersData(int i, ArrayList<ArrayList<TeachersData>> data, TeachersData teachersData) {
-        for (int j = i; j < i+6; j++) {
+    private ArrayList<ArrayList<TeachersData>> removeTeacherFromTeachersData(int i, int duration, ArrayList<ArrayList<TeachersData>> data, TeachersData teachersData) {
+        for (int j = i; j < i+duration; j++) {
             data.get(j).removeIf(n -> n.getTeacherName().equals(teachersData.getTeacherName()));
         }
         return data;
@@ -208,7 +210,7 @@ public class ScheduleService {
         }
     }
 
-    private ScheduleSubject createSubject(TeachersData teachersData, int i, String className) {
+    private ScheduleSubject createSubject(TeachersData teachersData, int i, int duration, String className) {
         ScheduleSubject scheduleSubject = new ScheduleSubject();
         scheduleSubject.setSubjectName(teachersData.getSubjectName());
         scheduleSubject.setSubjectType(teachersData.getSubjectType());
@@ -216,12 +218,12 @@ public class ScheduleService {
         scheduleSubject.setTeacherName(teachersData.getTeacherName());
         scheduleSubject.setClassRoomName(className);
         scheduleSubject.setFirstIndex(i);
-        scheduleSubject.setLastIndex(i+5);
+        scheduleSubject.setLastIndex(i + duration - 1);
         return scheduleSubject;
     }
 
-    private ScheduleSubject createSubject(TeachersData teachersData, int i) {
-        return  createSubject(teachersData, i, "online");
+    private ScheduleSubject createSubject(TeachersData teachersData, int i, int duration) {
+        return  createSubject(teachersData, i, duration, "online");
     }
 
     private void removeSubjectFromTeachersData(ArrayList<ArrayList<ArrayList<TeachersData>>> data, TeachersData teachersData) {
@@ -232,8 +234,8 @@ public class ScheduleService {
         }
     }
 
-    private void removeClassroomFromClassroomsData(AvailabilityData avaData, String classFoundName, int i, int d) {
-        for(int j = i; j < i+6; ++j) {
+    private void removeClassroomFromClassroomsData(AvailabilityData avaData, String classFoundName, int i, int duration, int d) {
+        for(int j = i; j < i+duration; ++j) {
             for(int m = 0; m < avaData.getClassroomsData().get(d).get(j).size(); m++) {
                 if (classFoundName.equals(avaData.getClassroomsData().get(d).get(j).get(m))) {
                     avaData.getClassroomsData().get(d).get(j).remove(m);

@@ -11,6 +11,7 @@ public class AvailabilityData {
 
     private String name;
     private boolean ifWinter;
+    private int lessonWidth;
     private String studyFieldId;
     private int numberOfSemester;
     private ArrayList<ArrayList<ArrayList<String>>> classroomsData;
