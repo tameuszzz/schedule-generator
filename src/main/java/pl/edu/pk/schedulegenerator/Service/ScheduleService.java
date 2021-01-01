@@ -251,4 +251,8 @@ public class ScheduleService {
     public Optional<Schedule> deleteScheduleById(String id) {
         return dao.deleteScheduleById(id);
     }
+
+    public Optional<Schedule> updateScheduleById(String id, ScheduleUpdate scheduleUpdate) {
+        return dao.updateScheduleById(id, scheduleUpdate);
+    }
 }

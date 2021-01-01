@@ -2,11 +2,14 @@ package pl.edu.pk.schedulegenerator.Controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.schedulegenerator.Entity.schedule.AvailabilityData;
 import pl.edu.pk.schedulegenerator.Entity.schedule.Schedule;
+import pl.edu.pk.schedulegenerator.Entity.schedule.ScheduleUpdate;
 import pl.edu.pk.schedulegenerator.Service.ScheduleService;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -40,6 +43,12 @@ public class ScheduleController {
     @DeleteMapping("/{id}")
     public Optional<Schedule> deleteScheduleById(@PathVariable String id) {
         return service.deleteScheduleById(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateScheduleById(@PathVariable String id, @Valid @RequestBody ScheduleUpdate scheduleUpdate) {
+        service.updateScheduleById(id, scheduleUpdate);
+        return ResponseEntity.ok("Pomyślnie edytowano nauczyciela akademickiego: " + scheduleUpdate.getName());
     }
 
 }
