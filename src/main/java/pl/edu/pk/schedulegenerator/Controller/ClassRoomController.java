@@ -1,7 +1,8 @@
 package pl.edu.pk.schedulegenerator.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.schedulegenerator.Entity.ClassRoom;
 import pl.edu.pk.schedulegenerator.Entity.ClassRoomUpdate;
@@ -9,6 +10,7 @@ import pl.edu.pk.schedulegenerator.Service.ClassRoomService;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -25,9 +27,16 @@ public class ClassRoomController {
     }
 
     @PostMapping
-    public ResponseEntity<String> postClassRoom(@RequestBody ClassRoom classRoom) {
+    public String postClassRoom(@Valid @RequestBody ClassRoom classRoom, Errors errors) {
+        if (errors.hasErrors()) {
+            String errorMessage = "Wystąpił błąd:  ";
+            for (ObjectError objectError : errors.getAllErrors()) {
+                errorMessage = errorMessage.concat(Objects.requireNonNull(objectError.getDefaultMessage()) + ' ');
+            }
+            return errorMessage;
+        }
         service.createClassRoom(classRoom);
-        return ResponseEntity.ok("Pomyślnie utworzono salę: " + classRoom.getName());
+        return "Pomyślnie utworzono salę: " + classRoom.getName();
     }
 
     @GetMapping("/{id}")
@@ -41,8 +50,15 @@ public class ClassRoomController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateClassRoomById(@PathVariable String id, @Valid @RequestBody ClassRoomUpdate classRoomUpdate) {
+    public String updateClassRoomById(@PathVariable String id, @Valid @RequestBody ClassRoomUpdate classRoomUpdate, Errors errors) {
+        if (errors.hasErrors()) {
+            String errorMessage = "Wystąpił błąd:  ";
+            for (ObjectError objectError : errors.getAllErrors()) {
+                errorMessage = errorMessage.concat(Objects.requireNonNull(objectError.getDefaultMessage()) + ' ');
+            }
+            return errorMessage;
+        }
         service.updateClassRoomById(id, classRoomUpdate);
-        return ResponseEntity.ok("Pomyślnie edytowano salę: " + classRoomUpdate.getName());
+        return "Pomyślnie edytowano salę: " + classRoomUpdate.getName();
     }
 }

@@ -1,7 +1,8 @@
 package pl.edu.pk.schedulegenerator.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.schedulegenerator.Entity.subject.Subject;
 import pl.edu.pk.schedulegenerator.Entity.subject.SubjectUpdate;
@@ -9,6 +10,7 @@ import pl.edu.pk.schedulegenerator.Service.SubjectService;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -26,9 +28,16 @@ public class SubjectController {
     }
 
     @PostMapping
-    public ResponseEntity<String> postSubject(@Valid @RequestBody Subject subject) {
+    public String postSubject(@Valid @RequestBody Subject subject, Errors errors) {
+        if (errors.hasErrors()) {
+            String errorMessage = "Wystąpił błąd:  ";
+            for (ObjectError objectError : errors.getAllErrors()) {
+                errorMessage = errorMessage.concat(Objects.requireNonNull(objectError.getDefaultMessage()) + ' ');
+            }
+            return errorMessage;
+        }
         service.postSubject(subject);
-        return ResponseEntity.ok("Pomyślnie utworzono kierunek: " + subject.getName());
+        return "Pomyślnie utworzono kierunek: " + subject.getName();
     }
 
     @GetMapping("/{id}")
@@ -42,9 +51,16 @@ public class SubjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateSubjectById(@PathVariable String id, @Valid @RequestBody SubjectUpdate subjectUpdate) {
+    public String updateSubjectById(@PathVariable String id, @Valid @RequestBody SubjectUpdate subjectUpdate, Errors errors) {
+        if (errors.hasErrors()) {
+            String errorMessage = "Wystąpił błąd:  ";
+            for (ObjectError objectError : errors.getAllErrors()) {
+                errorMessage = errorMessage.concat(Objects.requireNonNull(objectError.getDefaultMessage()) + ' ');
+            }
+            return errorMessage;
+        }
         service.updateSubjectById(id, subjectUpdate);
-        return ResponseEntity.ok("Pomyślnie edytowano kierunek: " + subjectUpdate.getName());
+        return "Pomyślnie edytowano kierunek: " + subjectUpdate.getName();
 
     }
 }

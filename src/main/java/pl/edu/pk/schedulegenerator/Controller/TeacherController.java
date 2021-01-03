@@ -1,7 +1,8 @@
 package pl.edu.pk.schedulegenerator.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.schedulegenerator.Entity.Teacher;
 import pl.edu.pk.schedulegenerator.Entity.TeacherUpdate;
@@ -9,6 +10,7 @@ import pl.edu.pk.schedulegenerator.Service.TeacherService;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -25,9 +27,16 @@ public class TeacherController {
     }
 
     @PostMapping
-    public ResponseEntity<String> postTeacher(@Valid @RequestBody Teacher teacher) {
+    public String postTeacher(@Valid @RequestBody Teacher teacher, Errors errors) {
+        if (errors.hasErrors()) {
+            String errorMessage = "Wystąpił błąd:  ";
+            for (ObjectError objectError : errors.getAllErrors()) {
+                errorMessage = errorMessage.concat(Objects.requireNonNull(objectError.getDefaultMessage()) + ' ');
+            }
+            return errorMessage;
+        }
         service.postTeacher(teacher);
-        return ResponseEntity.ok("Pomyślnie utworzono nowego nauczyciela akademickiego: " +teacher.getName());
+        return "Pomyślnie utworzono nowego nauczyciela akademickiego: " + teacher.getName();
     }
 
     @GetMapping("/{id}")
@@ -41,8 +50,15 @@ public class TeacherController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateTeacherById(@PathVariable String id, @Valid @RequestBody TeacherUpdate teacherUpdate) {
+    public String updateTeacherById(@PathVariable String id, @Valid @RequestBody TeacherUpdate teacherUpdate, Errors errors) {
+        if (errors.hasErrors()) {
+            String errorMessage = "Wystąpił błąd:  ";
+            for (ObjectError objectError : errors.getAllErrors()) {
+                errorMessage = errorMessage.concat(Objects.requireNonNull(objectError.getDefaultMessage()) + ' ');
+            }
+            return errorMessage;
+        }
         service.updateTeacherById(id, teacherUpdate);
-        return ResponseEntity.ok("Pomyślnie edytowano nauczyciela akademickiego: " + teacherUpdate.getName());
+        return "Pomyślnie edytowano nauczyciela akademickiego: " + teacherUpdate.getName();
     }
 }

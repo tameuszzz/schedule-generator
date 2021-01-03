@@ -216,6 +216,7 @@ public class ScheduleService {
         scheduleSubject.setSubjectType(teachersData.getSubjectType());
         scheduleSubject.setTeacherTitle(teachersData.getTeacherTitle());
         scheduleSubject.setTeacherName(teachersData.getTeacherName());
+        scheduleSubject.setGroup(teachersData.getGroup());
         scheduleSubject.setClassRoomName(className);
         scheduleSubject.setFirstIndex(i);
         scheduleSubject.setLastIndex(i + duration - 1);

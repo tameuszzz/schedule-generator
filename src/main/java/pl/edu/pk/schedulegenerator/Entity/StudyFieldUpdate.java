@@ -8,7 +8,7 @@ import javax.validation.constraints.*;
 public class StudyFieldUpdate {
 
     @NotBlank(message = "Nazwa kierunku nie została podana.")
-    @Size(min=3, message = "Nazwa musi mieć co najmniej 3 znaki.")
+//    @Size(min=1, message = "Nazwa musi mieć co najmniej 3 znaki.")
     private String name;
 
     @NotNull(message = "Nie podano stopnia kierunku studiów.")

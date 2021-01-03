@@ -1,7 +1,8 @@
 package pl.edu.pk.schedulegenerator.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.schedulegenerator.Entity.StudyField;
 import pl.edu.pk.schedulegenerator.Entity.StudyFieldUpdate;
@@ -9,6 +10,7 @@ import pl.edu.pk.schedulegenerator.Service.StudyFieldService;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -25,9 +27,16 @@ public class StudyFieldController {
     }
 
     @PostMapping
-    public ResponseEntity<String> postStudyField(@Valid @RequestBody StudyField studyField) {
+    public String postStudyField(@Valid @RequestBody StudyField studyField, Errors errors) {
+        if (errors.hasErrors()) {
+            String errorMessage = "Wystąpił błąd:  ";
+            for (ObjectError objectError : errors.getAllErrors()) {
+                errorMessage = errorMessage.concat(Objects.requireNonNull(objectError.getDefaultMessage()) + ' ');
+            }
+            return errorMessage;
+        }
         service.postStudyField(studyField);
-        return ResponseEntity.ok("Pomyślnie utworzono nowy kierunek: " + studyField.getName());
+        return "Pomyślnie utworzono nowy kierunek: " + studyField.getName();
     }
 
     @GetMapping("/{id}")
@@ -41,9 +50,16 @@ public class StudyFieldController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateStudyFieldById(@PathVariable String id, @Valid @RequestBody StudyFieldUpdate studyFieldUpdate) {
+    public String updateStudyFieldById(@PathVariable String id, @Valid @RequestBody StudyFieldUpdate studyFieldUpdate, Errors errors) {
+        if (errors.hasErrors()) {
+            String errorMessage = "Wystąpił błąd:  ";
+            for (ObjectError objectError : errors.getAllErrors()) {
+                errorMessage = errorMessage.concat(Objects.requireNonNull(objectError.getDefaultMessage()) + ' ');
+            }
+            return errorMessage;
+        }
         service.updateStudyFieldById(id, studyFieldUpdate);
-        return ResponseEntity.ok("Pomyślnie edytowano kierunek: " + studyFieldUpdate.getName());
+        return "Pomyślnie edytowano kierunek: " + studyFieldUpdate.getName();
 
     }
 

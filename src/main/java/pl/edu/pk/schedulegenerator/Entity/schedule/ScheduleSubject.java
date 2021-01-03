@@ -13,4 +13,5 @@ public class ScheduleSubject {
     private String teacherTitle;
     private String teacherName;
     private String classRoomName;
+    private String group;
 }
