@@ -140,6 +140,8 @@ public class ScheduleService {
 
                             removeSubjectFromTeachersData(preTeachersData, teachersData);
                             preTeachersData.set(d, removeTeacherFromTeachersData(i, duration, preDailyTeachersData, teachersData));
+                            preTeachersData.set(d, removeGroupsFromTeachersData(i, duration, preDailyTeachersData, teachersData));
+
                             for (int j = i; j < i+duration; j++) {
                                 int tmpDayCompaction = dayCompaction.getOrDefault(j, 0);
                                 dayCompaction.put(j, tmpDayCompaction + valueOfSubject);
@@ -200,11 +202,60 @@ public class ScheduleService {
         return data;
     }
 
+    private ArrayList<ArrayList<TeachersData>> removeGroupsFromTeachersData(int i, int duration, ArrayList<ArrayList<TeachersData>> data, TeachersData teachersData) {
+
+        final String type = teachersData.getSubjectType();
+        final int gruop = Integer.parseInt(teachersData.getGroup());
+
+        for (int j = i; j < i+duration; j++) {
+
+            if(type.equals("Exercise") || type.equals("Seminars")) {
+                data.get(j).removeIf(n -> n.getGroup().equals(teachersData.getGroup())
+                        && n.getSubjectType().equals(teachersData.getSubjectType()));
+                data.get(j).removeIf(n -> (Integer.parseInt(n.getGroup()) == (gruop * 2)
+                        || Integer.parseInt(n.getGroup()) == (gruop * 2 - 1))
+                        && n.getSubjectType().equals("Laboratories"));
+            }
+            else if (type.equals("Laboratories")) {
+
+                int excerciseGroup = 0;
+
+                switch (gruop) {
+                    case 1:
+                    case 2:
+                        excerciseGroup = 1;
+                        break;
+                    case 3:
+                    case 4:
+                        excerciseGroup = 2;
+                        break;
+                    case 5:
+                    case 6:
+                        excerciseGroup = 3;
+                        break;
+                    case 7:
+                    case 8:
+                        excerciseGroup = 4;
+                        break;
+
+                }
+                data.get(j).removeIf(n -> n.getGroup().equals(teachersData.getGroup())
+                        && n.getSubjectType().equals(teachersData.getSubjectType()));
+
+                int finalExcerciseGroup = excerciseGroup;
+                data.get(j).removeIf(n -> (Integer.parseInt(n.getGroup()) == finalExcerciseGroup
+                        && (n.getSubjectType().equals("Exercise")) || n.getSubjectType().equals("Seminars")));
+            }
+        }
+
+        return data;
+    }
+
     private int calculateValueOfSubject(String subjectType) {
         switch (subjectType) {
+            case "Laboratories":
             case "Exercise":
             case "Seminars":
-            case "Laboratories":
                 return 4;
             default:
                 return 8;
