@@ -23,7 +23,9 @@ import pl.edu.pk.schedulegenerator.SecuringWeb.Services.UserPrinciple;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -52,12 +54,17 @@ public class LoginController {
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("Hej");
         String jwt = jwtProvider.generateJwtToken(authentication);
-        System.out.println("O, cześć!");
         UserPrinciple userDetails = (UserPrinciple) authentication.getPrincipal();
 
-        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), userDetails.getAuthorities()));
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new JwtResponse(jwt,
+                userDetails.getId(),
+                userDetails.getUsername(),
+                roles));
     }
 
     @PostMapping("/signup")
