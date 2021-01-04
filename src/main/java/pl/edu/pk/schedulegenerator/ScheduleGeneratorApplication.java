@@ -6,8 +6,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import pl.edu.pk.schedulegenerator.DAO.DepartmentRepository;
+import pl.edu.pk.schedulegenerator.DAO.RoleRepository;
 import pl.edu.pk.schedulegenerator.DAO.TitleRepository;
 import pl.edu.pk.schedulegenerator.Entity.Department;
+import pl.edu.pk.schedulegenerator.Entity.Role;
+import pl.edu.pk.schedulegenerator.Entity.RoleName;
 import pl.edu.pk.schedulegenerator.Entity.Title;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -18,6 +21,9 @@ public class  ScheduleGeneratorApplication implements CommandLineRunner {
 
 	@Autowired
 	private TitleRepository titleRepository;
+
+	@Autowired
+	private RoleRepository roleRepository;
 
 	@Autowired
 	private DepartmentRepository departmentRepository;
@@ -44,5 +50,13 @@ public class  ScheduleGeneratorApplication implements CommandLineRunner {
 		titleRepository.save(new Title("9", "dr hab. inż. prof. PK"));
 		titleRepository.save(new Title("10", "prof. dr hab."));
 		titleRepository.save(new Title("11", "prof. dr hab. inż."));
+
+		roleRepository.deleteAll();
+		roleRepository.save(new Role("1", RoleName.ROLE_USER));
+		roleRepository.save(new Role("2", RoleName.ROLE_MODERATOR));
+		roleRepository.save(new Role("3", RoleName.ROLE_ADMIN));
+
+
+
 	}
 }

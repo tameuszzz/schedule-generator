@@ -23,4 +23,9 @@ public class User {
     private String password;
 
     private Set<Role> roles = new HashSet<>();
+
+    public User(@NotBlank String username, @NotBlank String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

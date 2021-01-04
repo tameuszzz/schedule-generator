@@ -14,4 +14,8 @@ public class Role {
     private String id;
     private RoleName name;
 
+    public Role(String id, RoleName name) {
+        this.id = id;
+        this.name = name;
+    }
 }

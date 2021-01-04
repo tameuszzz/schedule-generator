@@ -25,11 +25,15 @@ public class JwtProvider {
 
         UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
 
+        System.out.println("SIEMA");
+
+        long currentTimeMillis = System.currentTimeMillis();
+
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpiration*1000))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .setIssuedAt(new Date(currentTimeMillis))
+                .setExpiration(new Date(currentTimeMillis + 86400000))
+                .signWith(SignatureAlgorithm.HS512, userPrincipal.getPassword())
                 .compact();
     }
 

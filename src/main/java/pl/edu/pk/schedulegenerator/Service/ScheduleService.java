@@ -153,6 +153,7 @@ public class ScheduleService {
                     if(computeCompation(dayCompaction, duration) > maxCompaction) break;
 
                 }
+
                 if(!(subjects == null) && !subjects.isEmpty()) {
                     dayOfWeek.setSubjects(subjects);
                 }
