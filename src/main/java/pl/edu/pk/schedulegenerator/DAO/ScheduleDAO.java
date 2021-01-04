@@ -42,7 +42,8 @@ public class ScheduleDAO {
         schedule.ifPresent(s -> s.setNumberOfSemester(scheduleUpdate.getNumberOfSemester()));
         schedule.ifPresent(s -> s.setLessonWidth(scheduleUpdate.getLessonWidth()));
         schedule.ifPresent(s -> s.setSemesters(scheduleUpdate.getSemesters()));
-        return  schedule;
+        schedule.ifPresent(s -> repository.save(s));
+        return schedule;
     }
 
 }
