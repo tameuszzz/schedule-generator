@@ -25,8 +25,6 @@ public class JwtProvider {
 
         UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
 
-        System.out.println("SIEMA");
-
         long currentTimeMillis = System.currentTimeMillis();
 
         return Jwts.builder()

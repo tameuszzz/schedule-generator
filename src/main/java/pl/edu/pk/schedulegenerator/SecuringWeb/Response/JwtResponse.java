@@ -1,19 +1,19 @@
 package pl.edu.pk.schedulegenerator.SecuringWeb.Response;
 
-import org.springframework.security.core.GrantedAuthority;
-
-import java.util.Collection;
+import java.util.List;
 
 public class JwtResponse {
     private String token;
     private String type = "Bearer";
+    private String id;
     private String username;
-    private Collection<? extends GrantedAuthority> authorities;
+    private List<String> roles;
 
-    public JwtResponse(String accessToken, String username, Collection<? extends GrantedAuthority> authorities) {
+    public JwtResponse(String accessToken, String id, String username, List<String> roles) {
         this.token = accessToken;
+        this.id = id;
         this.username = username;
-        this.authorities = authorities;
+        this.roles = roles;
     }
 
     public String getAccessToken() {
@@ -40,7 +40,21 @@ public class JwtResponse {
         this.username = username;
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+
+    public String getId() {
+        return id;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
 }
