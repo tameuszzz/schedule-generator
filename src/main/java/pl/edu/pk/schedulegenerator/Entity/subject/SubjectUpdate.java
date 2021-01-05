@@ -19,6 +19,7 @@ public class SubjectUpdate {
     private SubjectSchedule schedule;
     private StudyStudents students;
 
+
     @NotEmpty(message = "Prowadzący przedmiot nie zostali podani.")
     private ArrayList<SubjectTeachers> teachers;
 }

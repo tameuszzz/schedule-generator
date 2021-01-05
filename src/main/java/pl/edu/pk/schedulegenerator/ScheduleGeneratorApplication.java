@@ -5,14 +5,16 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.edu.pk.schedulegenerator.DAO.DepartmentRepository;
 import pl.edu.pk.schedulegenerator.DAO.RoleRepository;
 import pl.edu.pk.schedulegenerator.DAO.TitleRepository;
-import pl.edu.pk.schedulegenerator.Entity.Department;
-import pl.edu.pk.schedulegenerator.Entity.Role;
-import pl.edu.pk.schedulegenerator.Entity.RoleName;
-import pl.edu.pk.schedulegenerator.Entity.Title;
+import pl.edu.pk.schedulegenerator.DAO.UserRepository;
+import pl.edu.pk.schedulegenerator.Entity.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @SpringBootApplication
 @EnableSwagger2
@@ -27,6 +29,12 @@ public class  ScheduleGeneratorApplication implements CommandLineRunner {
 
 	@Autowired
 	private DepartmentRepository departmentRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	PasswordEncoder encoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ScheduleGeneratorApplication.class, args);
@@ -57,6 +65,14 @@ public class  ScheduleGeneratorApplication implements CommandLineRunner {
 		roleRepository.save(new Role("3", RoleName.ROLE_ADMIN));
 
 
-
+		userRepository.deleteAll();
+		User user = new User("admin", encoder.encode("admin1"));
+		Set<Role> roles = new HashSet<>();
+		Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+				.orElseThrow(() -> new RuntimeException("Fail! -> Cause: Admin Role not find."));
+		roles.add(adminRole);
+		roles.add(adminRole);
+		user.setRoles(roles);
+		userRepository.save(user);
 	}
 }
