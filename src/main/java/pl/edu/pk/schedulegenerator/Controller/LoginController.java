@@ -107,4 +107,10 @@ public class LoginController {
 
         return new ResponseEntity<>(new ResponseMessage("User registered successfully!"), HttpStatus.OK);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return new ResponseEntity<>(new ResponseMessage("Logout successful!"), HttpStatus.OK);
+    }
 }
