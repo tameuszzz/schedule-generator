@@ -93,6 +93,7 @@ public class ScheduleService {
 
                         // petla iterujaca X kolejnych blokow 15 min w celu sprawdzenia czy jest miejsce na wpisanie przedmiotu
                         for(int j = i; j < i+duration; ++j) {
+                            if(j >= preDailyTeachersData.size()) break;
                             // petla sprawdza czy w danym bloku znajduje sie wybrany przedmiot
                             for(int m = 0; m < preDailyTeachersData.get(j).size(); m++) {
                                 if (teachersData.equals(preDailyTeachersData.get(j).get(m))) {

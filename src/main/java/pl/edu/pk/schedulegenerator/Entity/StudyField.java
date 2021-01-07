@@ -16,7 +16,7 @@ public class StudyField {
     private String id;
 
     @NotBlank(message = "Nazwa kierunku nie została podana.")
-//    @Size(min=1, message = "Nazwa musi mieć co najmniej 3 znaki.")
+    //@Size(min = 3, message = "Nazwa kierunku musi mieć co najmniej 3 znaki.")
     private String name;
 
     @NotNull(message = "Nie podano stopnia kierunku studiów.")

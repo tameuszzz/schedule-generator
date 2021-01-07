@@ -14,4 +14,5 @@ public class ScheduleSubject {
     private String teacherName;
     private String classRoomName;
     private String group;
+    private String description = "";
 }
