@@ -27,6 +27,7 @@ public class Subject {
 
     private SubjectSchedule schedule;
     private StudyStudents students;
+    private String error = "";
 
     @NotEmpty(message = "Prowadzący przedmiot nie zostali podani.")
     private ArrayList<SubjectTeachers> teachers;

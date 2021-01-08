@@ -42,6 +42,7 @@ public class ScheduleService {
         if (avaData.isIfWinter()) firstSem = 1;
         else firstSem = 2;
 
+        int dayFree = 0;
         boolean newSubjectFound = false, subjectFound = false, classroomFound = false;
 
         // petla iterujaca po liczbie semestrow
@@ -63,11 +64,24 @@ public class ScheduleService {
                     dayOfWeek = daysOfWeek.get(d);
                     subjects = daysOfWeek.get(d).getSubjects();
                     dayCompaction = compaction.get(d);
-                    System.out.println(dayOfWeek);
                 }
 
+//                if (maxCompaction < 15) {
+//                    if(d == dayFree) {
+//                        compaction.add(dayCompaction);
+//                        if (d >= daysOfWeek.size()) {
+//                            daysOfWeek.add(dayOfWeek);
+//                        } else {
+//                            daysOfWeek.set(d, dayOfWeek);
+//                        }
+//                        continue;
+//                    }
+//                }
+//
+//
+
                 // petla iterujaca po 15 min blokach
-                for (int i = 0; i < 56; i++) {
+                for (int i = 0; i < 50; i++) {
 
                     // jesli nie ma w bloku zadnych przedmiotow -> pomin
                     if(preDailyTeachersData.get(i).isEmpty()) continue;
@@ -89,6 +103,7 @@ public class ScheduleService {
 
                         // jak suma wartosci wpisanych juz przedmiotow w bloku i przedmiotu wybranego jest za duza -> pomin
                         if (dayCompaction.getOrDefault(i, 0) + valueOfSubject > 8) continue;
+
                         subjectFound = false;
 
                         // petla iterujaca X kolejnych blokow 15 min w celu sprawdzenia czy jest miejsce na wpisanie przedmiotu
@@ -113,11 +128,11 @@ public class ScheduleService {
                             else {
                                 ArrayList<ArrayList<String>> preDailyClassData = preClassData.get(d);
                                 for(int classIndex = 0; classIndex < teachersData.getClassName().size(); classIndex++) {
-                                    String classFoundName = teachersData.getClassName().get(classIndex);
+                                    String classFoundName = teachersData.getClassName().get(classIndex).replaceAll("\\s","");
                                     classroomFound = false;
                                     for(int j = i; j < i+duration; ++j) {
                                         for(int m = 0; m < preDailyClassData.get(j).size(); m++) {
-                                            if (classFoundName.equals(preDailyClassData.get(j).get(m))) {
+                                            if (classFoundName.equals(preDailyClassData.get(j).get(m).replaceAll("\\s",""))) {
                                                 classroomFound = true;
                                                 break;
                                             }
@@ -133,7 +148,6 @@ public class ScheduleService {
                                 if (!classroomFound) continue;
                             }
 
-                            log.info("Subject found: " + teachersData.toString());
                             newSubjectFound = true;
 
                             // to robi przerwe po zajeciach
@@ -174,13 +188,14 @@ public class ScheduleService {
                         d = -1;
                         maxCompaction +=5;
                         newSubjectFound = false;
+                        log.info("Back to monday");
                 }
 
             }
 
             semester.setDaysOfWeek(daysOfWeek);
             semesters.add(semester);
-
+            dayFree++;
         }
 
         schedule.setSemesters(semesters);
@@ -219,32 +234,32 @@ public class ScheduleService {
             }
             else if (type.equals("Laboratories")) {
 
-                int excerciseGroup = 0;
+                int exerciseGroup = 0;
 
                 switch (gruop) {
                     case 1:
                     case 2:
-                        excerciseGroup = 1;
+                        exerciseGroup = 1;
                         break;
                     case 3:
                     case 4:
-                        excerciseGroup = 2;
+                        exerciseGroup = 2;
                         break;
                     case 5:
                     case 6:
-                        excerciseGroup = 3;
+                        exerciseGroup = 3;
                         break;
                     case 7:
                     case 8:
-                        excerciseGroup = 4;
+                        exerciseGroup = 4;
                         break;
 
                 }
                 data.get(j).removeIf(n -> n.getGroup().equals(teachersData.getGroup())
                         && n.getSubjectType().equals(teachersData.getSubjectType()));
 
-                int finalExcerciseGroup = excerciseGroup;
-                data.get(j).removeIf(n -> (Integer.parseInt(n.getGroup()) == finalExcerciseGroup
+                int finalExerciseGroup = exerciseGroup;
+                data.get(j).removeIf(n -> (Integer.parseInt(n.getGroup()) == finalExerciseGroup
                         && (n.getSubjectType().equals("Exercise")) || n.getSubjectType().equals("Seminars")));
             }
         }
@@ -273,6 +288,7 @@ public class ScheduleService {
         scheduleSubject.setClassRoomName(className);
         scheduleSubject.setFirstIndex(i);
         scheduleSubject.setLastIndex(i + duration - 1);
+        log.info("Subject found: " + scheduleSubject.toString());
         return scheduleSubject;
     }
 

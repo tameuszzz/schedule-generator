@@ -18,6 +18,7 @@ public class SubjectUpdate {
 
     private SubjectSchedule schedule;
     private StudyStudents students;
+    private String error = "";
 
 
     @NotEmpty(message = "Prowadzący przedmiot nie zostali podani.")
