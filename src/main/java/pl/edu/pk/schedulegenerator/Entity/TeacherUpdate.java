@@ -19,6 +19,8 @@ public class TeacherUpdate {
     @Email(message = "Adres email jest niepoprawny.")
     private String email;
 
+    private int hours;
+
     @NotBlank(message = "Numer ID kierunku studiów nie został podany.")
     private String studyFieldId;
 
