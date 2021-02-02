@@ -29,4 +29,10 @@ public class StudyField {
     @Max(value = 10, message = "Podano zbyt dużą liczbę semestrów")
     private int numberOfSemesters;
 
+    public StudyField(String id, String name, int degree, int numberOfSemesters) {
+        this.id = id;
+        this.name = name;
+        this.degree = degree;
+        this.numberOfSemesters = numberOfSemesters;
+    }
 }

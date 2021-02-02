@@ -15,6 +15,7 @@ public class SubjectUpdate {
 
     @NotNull(message = "Obieralność przedmiotu nie została podana.")
     private boolean eligibility;
+    private float rate;
 
     private SubjectSchedule schedule;
     private StudyStudents students;

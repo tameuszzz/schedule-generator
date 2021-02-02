@@ -49,6 +49,7 @@ public class TeacherDAO {
         teacher.ifPresent(t -> t.setName(teacherUpdate.getName()));
         teacher.ifPresent(t -> t.setTitleID(teacherUpdate.getTitleID()));
         teacher.ifPresent(t -> t.setStudyFieldId(teacherUpdate.getStudyFieldId()));
+        teacher.ifPresent(t -> t.setHours(teacherUpdate.getHours()));
         teacher.ifPresent(t -> t.setAvailability(teacherUpdate.getAvailability()));
         teacher.ifPresent(t -> repository.save(t));
         return teacher;

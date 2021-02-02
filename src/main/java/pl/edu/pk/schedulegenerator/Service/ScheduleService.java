@@ -37,23 +37,27 @@ public class ScheduleService {
         ArrayList<Semester> semesters = new ArrayList<>();
 
         int duration = avaData.getLessonWidth() * 3;
+        int maxCompaction, tmpCompaction = 0;
         int firstSem;
-        int maxCompaction = 12;
         if (avaData.isIfWinter()) firstSem = 1;
         else firstSem = 2;
+        int dayFree = 4;
 
-        int dayFree = 0;
         boolean newSubjectFound = false, subjectFound = false, classroomFound = false;
 
         // petla iterujaca po liczbie semestrow
         for (int s = firstSem; s <= schedule.getNumberOfSemester(); s+=2) {
+            System.out.println("New Sem: " + s);
 
             Semester semester = new Semester();
             ArrayList<DayOfWeek> daysOfWeek = new ArrayList<>();
             ArrayList<HashMap<Integer, Integer>> compaction = new ArrayList<>();
+            maxCompaction = 16;
 
             // petla iterujaca po dniach tygodnia
             for (int d = 0; d < 5; d++) {
+
+                System.out.println("dzien: " + d + ", wolne w: " + dayFree);
 
                 DayOfWeek dayOfWeek = new DayOfWeek();
                 ArrayList<ScheduleSubject> subjects = new ArrayList<>();
@@ -66,19 +70,10 @@ public class ScheduleService {
                     dayCompaction = compaction.get(d);
                 }
 
-//                if (maxCompaction < 15) {
-//                    if(d == dayFree) {
-//                        compaction.add(dayCompaction);
-//                        if (d >= daysOfWeek.size()) {
-//                            daysOfWeek.add(dayOfWeek);
-//                        } else {
-//                            daysOfWeek.set(d, dayOfWeek);
-//                        }
-//                        continue;
-//                    }
-//                }
-//
-//
+                if(d == dayFree) {
+                    tmpCompaction = maxCompaction;
+                    maxCompaction = 0;
+                }
 
                 // petla iterujaca po 15 min blokach
                 for (int i = 0; i < 50; i++) {
@@ -103,6 +98,7 @@ public class ScheduleService {
 
                         // jak suma wartosci wpisanych juz przedmiotow w bloku i przedmiotu wybranego jest za duza -> pomin
                         if (dayCompaction.getOrDefault(i, 0) + valueOfSubject > 8) continue;
+                        if (computeCompation(dayCompaction, duration)  + valueOfSubject > maxCompaction) break;
 
                         subjectFound = false;
 
@@ -117,6 +113,8 @@ public class ScheduleService {
                                 } else subjectFound = false;
                             }
                         }
+
+                        System.out.println("subjectFound: " + teachersData.getTeacherName());
 
                         if(subjectFound) {
                             if (teachersData.getClassName() == null) {
@@ -183,19 +181,22 @@ public class ScheduleService {
                     daysOfWeek.set(d, dayOfWeek);
                 }
 
+                if(d == dayFree) {
+                    maxCompaction = tmpCompaction;
+                }
 
                 if ((d == 4 && !preTeachersData.isEmpty()) && newSubjectFound) {
                         d = -1;
-                        maxCompaction +=5;
+                        maxCompaction += 8;
                         newSubjectFound = false;
                         log.info("Back to monday");
                 }
-
             }
 
             semester.setDaysOfWeek(daysOfWeek);
             semesters.add(semester);
-            dayFree++;
+            if (s == firstSem ) dayFree = 0;
+            else dayFree++;
         }
 
         schedule.setSemesters(semesters);
@@ -270,6 +271,7 @@ public class ScheduleService {
     private int calculateValueOfSubject(String subjectType) {
         switch (subjectType) {
             case "Laboratories":
+                return 3;
             case "Exercise":
             case "Seminars":
                 return 4;
@@ -307,7 +309,7 @@ public class ScheduleService {
     private void removeClassroomFromClassroomsData(AvailabilityData avaData, String classFoundName, int i, int duration, int d) {
         for(int j = i; j < i+duration; ++j) {
             for(int m = 0; m < avaData.getClassroomsData().get(d).get(j).size(); m++) {
-                if (classFoundName.equals(avaData.getClassroomsData().get(d).get(j).get(m))) {
+                if (classFoundName.equals(avaData.getClassroomsData().get(d).get(j).get(m).replaceAll("\\s",""))) {
                     avaData.getClassroomsData().get(d).get(j).remove(m);
                 }
             }

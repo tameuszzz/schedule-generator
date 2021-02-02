@@ -88,6 +88,7 @@ public class SubjectDAO {
         Optional<Subject> subject = repository.findById(id);
         subject.ifPresent(s-> s.setName(subjectUpdate.getName()));
         subject.ifPresent(s-> s.setEligibility(subjectUpdate.isEligibility()));
+        subject.ifPresent(s-> s.setRate(subjectUpdate.getRate()));
         subject.ifPresent(s-> s.setSchedule(subjectUpdate.getSchedule()));
         subject.ifPresent(s-> s.setStudents(subjectUpdate.getStudents()));
         subject.ifPresent(s-> s.setError(subjectUpdate.getError()));
