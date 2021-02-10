@@ -8,7 +8,7 @@ import pl.edu.pk.schedulegenerator.Service.DepartmentService;
 import java.util.Collection;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/department")
 public class DepartmentController {

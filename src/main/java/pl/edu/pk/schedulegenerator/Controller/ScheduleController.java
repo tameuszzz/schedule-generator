@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/schedule")
 public class ScheduleController {
