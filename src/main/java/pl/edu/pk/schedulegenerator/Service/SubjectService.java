@@ -44,4 +44,8 @@ public class SubjectService {
         subjectUpdate.setTeachers(subject.getTeachers());
         dao.updateSubjectById(subject.getId(), subjectUpdate);
     }
+
+    public String postAssignments(String id) {
+        return dao.postAssignments(id);
+    }
 }

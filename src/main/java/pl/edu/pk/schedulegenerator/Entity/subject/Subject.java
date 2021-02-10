@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
@@ -31,7 +30,6 @@ public class Subject {
     private StudyStudents students;
     private String error = "";
 
-    @NotEmpty(message = "Prowadzący przedmiot nie zostali podani.")
     private ArrayList<SubjectTeachers> teachers;
 
 }

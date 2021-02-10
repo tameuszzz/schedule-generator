@@ -47,7 +47,7 @@ public class ScheduleService {
 
         // petla iterujaca po liczbie semestrow
         for (int s = firstSem; s <= schedule.getNumberOfSemester(); s+=2) {
-            System.out.println("New Sem: " + s);
+            //System.out.println("New Sem: " + s);
 
             Semester semester = new Semester();
             ArrayList<DayOfWeek> daysOfWeek = new ArrayList<>();
@@ -57,7 +57,7 @@ public class ScheduleService {
             // petla iterujaca po dniach tygodnia
             for (int d = 0; d < 5; d++) {
 
-                System.out.println("dzien: " + d + ", wolne w: " + dayFree);
+                //System.out.println("dzien: " + d + ", wolne w: " + dayFree);
 
                 DayOfWeek dayOfWeek = new DayOfWeek();
                 ArrayList<ScheduleSubject> subjects = new ArrayList<>();
@@ -114,7 +114,7 @@ public class ScheduleService {
                             }
                         }
 
-                        System.out.println("subjectFound: " + teachersData.getTeacherName());
+                        //System.out.println("subjectFound: " + teachersData.getTeacherName());
 
                         if(subjectFound) {
                             if (teachersData.getClassName() == null) {
@@ -189,7 +189,7 @@ public class ScheduleService {
                         d = -1;
                         maxCompaction += 8;
                         newSubjectFound = false;
-                        log.info("Back to monday");
+                        //log.info("Back to monday");
                 }
             }
 
@@ -290,7 +290,7 @@ public class ScheduleService {
         scheduleSubject.setClassRoomName(className);
         scheduleSubject.setFirstIndex(i);
         scheduleSubject.setLastIndex(i + duration - 1);
-        log.info("Subject found: " + scheduleSubject.toString());
+        //log.info("Subject found: " + scheduleSubject.toString());
         return scheduleSubject;
     }
 

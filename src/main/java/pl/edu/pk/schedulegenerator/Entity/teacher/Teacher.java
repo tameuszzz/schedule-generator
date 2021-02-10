@@ -1,9 +1,10 @@
-package pl.edu.pk.schedulegenerator.Entity;
+package pl.edu.pk.schedulegenerator.Entity.teacher;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import pl.edu.pk.schedulegenerator.Entity.WeekAvailability;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -30,6 +31,7 @@ public class Teacher {
     private String email;
 
     private int hours;
+    private HoursByType hoursByType;
 
     @NotBlank(message = "Numer ID kierunku studiów nie został podany.")
     private String studyFieldId;

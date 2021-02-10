@@ -1,24 +1,20 @@
-package pl.edu.pk.schedulegenerator.Entity.subject;
+package pl.edu.pk.schedulegenerator.Entity.teacher;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import pl.edu.pk.schedulegenerator.Entity.teacher.Teacher;
 
 @Data
 @RequiredArgsConstructor
-public class SubjectTeachers {
-
-    private Teacher teacher;
+public class NewSubjectTeacher {
+    private String teacherId;
+    private String subjectName;
     private boolean lecturesEnable;
     private int lecturesHours;
-    //private int lecturesGroups;
     private boolean exerciseEnable;
     private int exerciseHours;
-    //private int exerciseGroups;
     private boolean laboratoriesEnable;
     private int laboratoriesHours;
-    //private int laboratoriesGroups;
     private boolean seminarsEnable;
     private int seminarsHours;
-    //private int seminarsGroups;
+
 }

@@ -40,6 +40,13 @@ public class SubjectController {
         return "Pomyślnie utworzono kierunek: " + subject.getName();
     }
 
+    @PostMapping("/assign")
+    public String postAssignments(@Valid @RequestBody String id) {
+        System.out.println("assignment id : " + id);
+        service.postAssignments(id);
+        return "Pomyślnie wprowadzono przydział: " + id;
+    }
+
     @GetMapping("/{id}")
     public Optional<Subject> getSubjectById(@PathVariable String id) {
         return service.getSubjectById(id);

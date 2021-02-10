@@ -3,7 +3,6 @@ package pl.edu.pk.schedulegenerator.Entity.subject;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
@@ -21,7 +20,5 @@ public class SubjectUpdate {
     private StudyStudents students;
     private String error = "";
 
-
-    @NotEmpty(message = "Prowadzący przedmiot nie zostali podani.")
     private ArrayList<SubjectTeachers> teachers;
 }

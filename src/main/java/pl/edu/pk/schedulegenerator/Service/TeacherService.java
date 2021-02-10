@@ -3,8 +3,9 @@ package pl.edu.pk.schedulegenerator.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pk.schedulegenerator.DAO.TeacherDAO;
-import pl.edu.pk.schedulegenerator.Entity.Teacher;
-import pl.edu.pk.schedulegenerator.Entity.TeacherUpdate;
+import pl.edu.pk.schedulegenerator.Entity.teacher.NewSubjectTeacher;
+import pl.edu.pk.schedulegenerator.Entity.teacher.Teacher;
+import pl.edu.pk.schedulegenerator.Entity.teacher.TeacherUpdate;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -33,5 +34,13 @@ public class TeacherService {
 
     public Optional<Teacher> updateTeacherById(String id, TeacherUpdate teacherUpdate) {
         return dao.updateTeacherById(id, teacherUpdate);
+    }
+
+    public NewSubjectTeacher addHoursToTeacher(NewSubjectTeacher newSubjectTeacher) {
+        return dao.addHoursToTeacher(newSubjectTeacher);
+    }
+
+    public NewSubjectTeacher removeHoursFromTeacher(NewSubjectTeacher newSubjectTeacher) {
+        return dao.removeHoursFromTeacher(newSubjectTeacher);
     }
 }

@@ -20,4 +20,7 @@ public class StudyFieldUpdate {
     @Min(value = 1, message = "Podano zbyt mała liczbę semestrów")
     @Max(value = 10, message = "Podano zbyt dużą liczbę semestrów")
     private int numberOfSemesters;
+
+    private int fullTime;
+    private int erasmus;
 }

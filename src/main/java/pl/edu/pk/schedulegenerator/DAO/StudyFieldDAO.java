@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import pl.edu.pk.schedulegenerator.Entity.StudyField;
 import pl.edu.pk.schedulegenerator.Entity.StudyFieldUpdate;
-import pl.edu.pk.schedulegenerator.Entity.Teacher;
+import pl.edu.pk.schedulegenerator.Entity.teacher.Teacher;
 import pl.edu.pk.schedulegenerator.Service.TeacherService;
 
 import java.util.Collection;
@@ -56,6 +56,8 @@ public class StudyFieldDAO {
         studyField.ifPresent(s -> s.setName(studyFieldUpdate.getName()));
         studyField.ifPresent(s -> s.setDegree(studyFieldUpdate.getDegree()));
         studyField.ifPresent(s -> s.setNumberOfSemesters(studyFieldUpdate.getNumberOfSemesters()));
+        studyField.ifPresent(s -> s.setFullTime(studyFieldUpdate.getFullTime()));
+        studyField.ifPresent(s -> s.setErasmus(studyFieldUpdate.getErasmus()));
         studyField.ifPresent(s -> repository.save(s));
         return studyField;
     }

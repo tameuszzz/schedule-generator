@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.pk.schedulegenerator.Entity.Teacher;
-import pl.edu.pk.schedulegenerator.Entity.TeacherUpdate;
+import pl.edu.pk.schedulegenerator.Entity.teacher.NewSubjectTeacher;
+import pl.edu.pk.schedulegenerator.Entity.teacher.Teacher;
+import pl.edu.pk.schedulegenerator.Entity.teacher.TeacherUpdate;
 import pl.edu.pk.schedulegenerator.Service.TeacherService;
 
 import javax.validation.Valid;
@@ -37,6 +38,32 @@ public class TeacherController {
         }
         service.postTeacher(teacher);
         return "Pomyślnie utworzono nowego nauczyciela akademickiego: " + teacher.getName();
+    }
+
+    @PostMapping("/addHours")
+    public String addHoursToTeacher(@Valid @RequestBody NewSubjectTeacher newSubjectTeacher, Errors errors) {
+        if (errors.hasErrors()) {
+            String errorMessage = "Wystąpił błąd:  ";
+            for (ObjectError objectError : errors.getAllErrors()) {
+                errorMessage = errorMessage.concat(Objects.requireNonNull(objectError.getDefaultMessage()) + ' ');
+            }
+            return errorMessage;
+        }
+        service.addHoursToTeacher(newSubjectTeacher);
+        return "Pomyślnie przypisano przedmiot: " + newSubjectTeacher.getSubjectName();
+    }
+
+    @PostMapping("/removeHours")
+    public String removeHoursFromTeacher(@Valid @RequestBody NewSubjectTeacher newSubjectTeacher, Errors errors) {
+        if (errors.hasErrors()) {
+            String errorMessage = "Wystąpił błąd:  ";
+            for (ObjectError objectError : errors.getAllErrors()) {
+                errorMessage = errorMessage.concat(Objects.requireNonNull(objectError.getDefaultMessage()) + ' ');
+            }
+            return errorMessage;
+        }
+        service.removeHoursFromTeacher(newSubjectTeacher);
+        return "Pomyślnie usunięto przedmiot: " + newSubjectTeacher.getSubjectName();
     }
 
     @GetMapping("/{id}")
