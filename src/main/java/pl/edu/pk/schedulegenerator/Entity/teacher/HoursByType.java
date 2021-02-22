@@ -13,6 +13,7 @@ public class HoursByType {
     private int hoursInstL = 0;
     private int hoursIInstZ = 0;
     private int hoursIInstL = 0;
+    private int hoursErasmus = 0;
 
     public HoursByType() {
         this.hoursCurr = 0;
@@ -24,9 +25,10 @@ public class HoursByType {
         this.hoursInstL = 0;
         this.hoursIInstZ = 0;
         this.hoursIInstL = 0;
+        this.hoursErasmus = 0;
     }
 
-    public HoursByType(int hoursCurr, int hoursIstZ, int hoursIstL, int hoursIIstL, int hoursIIstZ, int hoursInstZ, int hoursInstL, int hoursIInstZ, int hoursIInstL) {
+    public HoursByType(int hoursCurr, int hoursIstZ, int hoursIstL, int hoursIIstL, int hoursIIstZ, int hoursInstZ, int hoursInstL, int hoursIInstZ, int hoursIInstL, int hoursErasmus) {
         this.hoursCurr = hoursCurr;
         this.hoursIstZ = hoursIstZ;
         this.hoursIstL = hoursIstL;
@@ -36,5 +38,6 @@ public class HoursByType {
         this.hoursInstL = hoursInstL;
         this.hoursIInstZ = hoursIInstZ;
         this.hoursIInstL = hoursIInstL;
+        this.hoursErasmus = hoursErasmus;
     }
 }

@@ -125,40 +125,43 @@ public class TeacherDAO {
 
         hoursByType.setHoursCurr(hoursByType.getHoursCurr() + hoursRounded);
 
-        // stopien studiow
-        if (studyField.get().getDegree() == 1) {
-            // stacjonarne
-            if (studyField.get().getFullTime() == 1) {
-                if (isWinter) {
-                    hoursByType.setHoursIstZ(hoursByType.getHoursIstZ() + hoursRounded);
+        if (studyField.get().getErasmus() == 2) {
+            // stopien studiow
+            if (studyField.get().getDegree() == 1) {
+                // stacjonarne
+                if (studyField.get().getFullTime() == 1) {
+                    if (isWinter) {
+                        hoursByType.setHoursIstZ(hoursByType.getHoursIstZ() + hoursRounded);
+                    } else {
+                        hoursByType.setHoursIstL(hoursByType.getHoursIstL() + hoursRounded);
+                    }
                 } else {
-                    hoursByType.setHoursIstL(hoursByType.getHoursIstL() + hoursRounded);
+                    if (isWinter) {
+                        hoursByType.setHoursInstZ(hoursByType.getHoursInstZ() + hoursRounded);
+                    } else {
+                        hoursByType.setHoursInstL(hoursByType.getHoursInstL() + hoursRounded);
+                    }
                 }
             } else {
-                if (isWinter) {
-                    hoursByType.setHoursInstZ(hoursByType.getHoursInstZ() + hoursRounded);
+                // stacjonarne
+                if (studyField.get().getFullTime() == 1) {
+                    if (isWinter) {
+                        hoursByType.setHoursIIstZ(hoursByType.getHoursIIstZ() + hoursRounded);
+                    } else {
+                        hoursByType.setHoursIIstL(hoursByType.getHoursIIstL() + hoursRounded);
+                    }
                 } else {
-                    hoursByType.setHoursInstL(hoursByType.getHoursInstL() + hoursRounded);
+                    if (isWinter) {
+                        hoursByType.setHoursIInstZ(hoursByType.getHoursIInstZ() + hoursRounded);
+                    } else {
+                        hoursByType.setHoursIInstL(hoursByType.getHoursIInstL() + hoursRounded);
+                    }
                 }
+
             }
         } else {
-            // stacjonarne
-            if (studyField.get().getFullTime() == 1) {
-                if (isWinter) {
-                    hoursByType.setHoursIIstZ(hoursByType.getHoursIIstZ() + hoursRounded);
-                } else {
-                    hoursByType.setHoursIIstL(hoursByType.getHoursIIstL() + hoursRounded);
-                }
-            } else {
-                if (isWinter) {
-                    hoursByType.setHoursIInstZ(hoursByType.getHoursIInstZ() + hoursRounded);
-                } else {
-                    hoursByType.setHoursIInstL(hoursByType.getHoursIInstL() + hoursRounded);
-                }
-            }
-
+            hoursByType.setHoursErasmus(hoursByType.getHoursErasmus() + hoursRounded);
         }
-
         teacher.ifPresent(t -> t.setHoursByType(hoursByType));
         teacher.ifPresent(t -> repository.save(t));
 
@@ -206,38 +209,42 @@ public class TeacherDAO {
 
         hoursByType.setHoursCurr(hoursByType.getHoursCurr() - hoursRounded);
 
-        // stopien studiow
-        if (studyField.get().getDegree() == 1) {
-            // stacjonarne
-            if (studyField.get().getFullTime() == 1) {
-                if (isWinter) {
-                    hoursByType.setHoursIstZ(hoursByType.getHoursIstZ() - hoursRounded);
+        if (studyField.get().getErasmus() == 2) {
+            // stopien studiow
+            if (studyField.get().getDegree() == 1) {
+                // stacjonarne
+                if (studyField.get().getFullTime() == 1) {
+                    if (isWinter) {
+                        hoursByType.setHoursIstZ(hoursByType.getHoursIstZ() - hoursRounded);
+                    } else {
+                        hoursByType.setHoursIstL(hoursByType.getHoursIstL() - hoursRounded);
+                    }
                 } else {
-                    hoursByType.setHoursIstL(hoursByType.getHoursIstL() - hoursRounded);
+                    if (isWinter) {
+                        hoursByType.setHoursInstZ(hoursByType.getHoursInstZ() - hoursRounded);
+                    } else {
+                        hoursByType.setHoursInstL(hoursByType.getHoursInstL() - hoursRounded);
+                    }
                 }
             } else {
-                if (isWinter) {
-                    hoursByType.setHoursInstZ(hoursByType.getHoursInstZ() - hoursRounded);
+                // stacjonarne
+                if (studyField.get().getFullTime() == 1) {
+                    if (isWinter) {
+                        hoursByType.setHoursIIstZ(hoursByType.getHoursIIstZ() - hoursRounded);
+                    } else {
+                        hoursByType.setHoursIIstL(hoursByType.getHoursIIstL() - hoursRounded);
+                    }
                 } else {
-                    hoursByType.setHoursInstL(hoursByType.getHoursInstL() - hoursRounded);
+                    if (isWinter) {
+                        hoursByType.setHoursIInstZ(hoursByType.getHoursIInstZ() - hoursRounded);
+                    } else {
+                        hoursByType.setHoursIInstL(hoursByType.getHoursIInstL() - hoursRounded);
+                    }
                 }
+
             }
         } else {
-            // stacjonarne
-            if (studyField.get().getFullTime() == 1) {
-                if (isWinter) {
-                    hoursByType.setHoursIIstZ(hoursByType.getHoursIIstZ() - hoursRounded);
-                } else {
-                    hoursByType.setHoursIIstL(hoursByType.getHoursIIstL() - hoursRounded);
-                }
-            } else {
-                if (isWinter) {
-                    hoursByType.setHoursIInstZ(hoursByType.getHoursIInstZ() - hoursRounded);
-                } else {
-                    hoursByType.setHoursIInstL(hoursByType.getHoursIInstL() - hoursRounded);
-                }
-            }
-
+            hoursByType.setHoursErasmus(hoursByType.getHoursErasmus() - hoursRounded);
         }
 
         teacher.ifPresent(t -> t.setHoursByType(hoursByType));

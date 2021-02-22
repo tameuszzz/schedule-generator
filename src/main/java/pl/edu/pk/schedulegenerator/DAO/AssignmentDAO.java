@@ -27,12 +27,7 @@ public class AssignmentDAO {
     private TeacherService teacherService;
 
     public Collection<Assignment> getAssignments() {
-        HoursByType hoursByType = new HoursByType();
-        List<Teacher> teachers = teacherRepository.findAll();
-        for (Teacher teacher: teachers) {
-            teacher.setHoursByType(hoursByType);
-            teacherRepository.save(teacher);
-        }
+        resetHours();
         return repository.findAll();
     }
 
@@ -42,6 +37,7 @@ public class AssignmentDAO {
 
     public Optional<Assignment> getAssignmentById(String id) {
         Optional<Assignment> assignment = repository.findById(id);
+        resetHours();
         for (TeacherAssignments teacherAssignment : assignment.get().getAssignments()) {
             NewSubjectTeacher subjectTeacher = new NewSubjectTeacher();
             subjectTeacher.setTeacherId(teacherAssignment.getTeacherId());
@@ -82,5 +78,14 @@ public class AssignmentDAO {
         assignment.ifPresent(c -> c.setAssignments(assignmentUpdate.getAssignments()));
         assignment.ifPresent(c -> repository.save(c));
         return assignment;
+    }
+
+    private void resetHours() {
+        HoursByType hoursByType = new HoursByType();
+        List<Teacher> teachers = teacherRepository.findAll();
+        for (Teacher teacher: teachers) {
+            teacher.setHoursByType(hoursByType);
+            teacherRepository.save(teacher);
+        }
     }
 }
